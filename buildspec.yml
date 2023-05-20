@@ -3,7 +3,7 @@ phases:
   pre_build:
     commands:
       - echo Logging in to Amazon ECR...
-      - $(aws ecr get-login-password --region ap-northeast-1 | docker login --username AWS --password-stdin <Account ID>.dkr.ecr.ap-northeast-1.amazonaws.com)
+      - $(aws ecr get-login-password --region ap-northeast-1 | docker login --username AWS --password-stdin 626394096352.dkr.ecr.ap-northeast-1.amazonaws.com)
       - AWS_ACCOUNT_ID=$(echo ${CODEBUILD_BUILD_ARN} | cut -f 5 -d :)
       - REPOSITORY_URL=${AWS_ACCOUNT_ID}.dkr.ecr.ap-northeast-1.amazonaws.com/ma-fujishiroms-sqs-consumer
       - IMAGE_TAG=$(echo ${CODEBUILD_RESOLVED_SOURCE_VERSION} | cut -c 1-7)
