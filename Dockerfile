@@ -1,7 +1,7 @@
 # Docker Imageとしてadoptopenjdk11を使用
 FROM adoptopenjdk:11-jdk-hotspot
 
-# git などのインストール
+# git のインストール
 RUN apt-get update && apt-get install -y \
        wget tar iproute2 git
 
