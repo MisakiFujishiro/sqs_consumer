@@ -8,6 +8,6 @@ public class frontendController {
 
     @RequestMapping(value="/sqs-consumer")
     public String frontend(){
-        return "Hellow sqs-consumer";
+        return "Hello sqs-consumer";
     }
 }
