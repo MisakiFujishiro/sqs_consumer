@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: com.msa.aws.sqs.sqs_consumer.SqsConsumerApplicationTests
 -------------------------------------------------------------------------------
-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.608 s - in com.msa.aws.sqs.sqs_consumer.SqsConsumerApplicationTests
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 4.538 s - in com.msa.aws.sqs.sqs_consumer.SqsConsumerApplicationTests
