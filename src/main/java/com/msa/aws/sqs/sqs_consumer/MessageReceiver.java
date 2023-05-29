@@ -23,6 +23,7 @@ public class MessageReceiver {
 
     ReceiveMessageResult result = amazonSQSClient.receiveMessage(request);
 
+    System.out.println(result);
     for (Message msg : result.getMessages()) {
         // 受信したメッセージの情報を表示
         System.out.println("["+msg.getMessageId()+"]");
