@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class frontendController {
 
-    @RequestMapping(value="/sqs-consumer")
+    @RequestMapping(value="/sqs-consumer", produces = "text/plain")
     public String frontend(){
-        return "Hello sqs-consumer";
+        return "Hello sqs-consumer!";
     }
 }
