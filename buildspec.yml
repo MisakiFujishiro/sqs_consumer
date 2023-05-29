@@ -1,17 +1,13 @@
 version: 0.2
 
-env:
-  parameter-store:
-    DOCKER_USER: "MA-fujishiroms-docker-accesstoken"
-    DOCKER_TOKEN: "MA-fujishiroms-docker-user"
 
 phases:
   pre_build:
     commands:
       - echo Logging in to Amazon ECR...
       - $(aws ecr get-login --no-include-email --region ap-northeast-1)
-      - echo ${DOCKER_USER}
-      - echo ${DOCKER_TOKEN} | docker login -u ${DOCKER_USER} --password-stdin
+      - echo ${docker-user}
+      - echo ${docker-pass} | docker login -u ${docker-user} --password-stdin
       - AWS_ACCOUNT_ID=$(echo ${CODEBUILD_BUILD_ARN} | cut -f 5 -d :)
       - REPOSITORY_URL=${AWS_ACCOUNT_ID}.dkr.ecr.ap-northeast-1.amazonaws.com/ma-fujishiroms-sqs-consumer
       - IMAGE_TAG=$(echo ${CODEBUILD_RESOLVED_SOURCE_VERSION} | cut -c 1-7)
