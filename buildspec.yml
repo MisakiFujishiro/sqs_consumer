@@ -1,10 +1,11 @@
 version: 0.2
-phases:
-  env:
-    parameter-store:
-      DOCKER_USER: MA-fujishiroms-docker-accesstoken
-      DOCKER_TOKEN: MA-fujishiroms-docker-user
 
+env:
+  parameter-store:
+    DOCKER_USER: MA-fujishiroms-docker-accesstoken
+    DOCKER_TOKEN: MA-fujishiroms-docker-user
+
+phases:
   pre_build:
     commands:
       - echo Logging in to Amazon ECR...
