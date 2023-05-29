@@ -1,3 +1,4 @@
 /home/fujishiroms/IdeaProjects/sqs_consumer/src/main/java/com/msa/aws/sqs/sqs_consumer/SqsConsumerApplication.java
 /home/fujishiroms/IdeaProjects/sqs_consumer/src/main/java/com/msa/aws/sqs/sqs_consumer/config/sqsConfig.java
+/home/fujishiroms/IdeaProjects/sqs_consumer/src/main/java/com/msa/aws/sqs/sqs_consumer/frontendController.java
 /home/fujishiroms/IdeaProjects/sqs_consumer/src/main/java/com/msa/aws/sqs/sqs_consumer/MessageReceiver.java
