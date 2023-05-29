@@ -39,9 +39,8 @@ public class MessageReceiver {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
 
-
+        processing=true;
         for (Message msg : result.getMessages()) {
-            processing=true;
             // 処理開始時間
             LocalDateTime now_bf = LocalDateTime.now();
             System.out.println(" Recived Time: "+ formatter.format(now_bf));
@@ -68,8 +67,9 @@ public class MessageReceiver {
             // 受信したメッセージを削除
             amazonSQSClient.deleteMessage(url, msg.getReceiptHandle());
 
-            processing=false;
         }
+    processing=false;
+
     }
     private void waitInMilliseconds(int milliseconds) {
         try {
