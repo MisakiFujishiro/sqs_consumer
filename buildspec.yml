@@ -1,6 +1,9 @@
 version: 0.2
 
-
+env:
+  variables:
+    docker-user: DOCKER_USER
+    docker-pass: DOCKER_PASS
 phases:
   pre_build:
     commands:
