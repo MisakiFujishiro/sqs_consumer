@@ -1,79 +1,64 @@
 package com.msa.aws.sqs.sqs_consumer;
 
-import com.amazonaws.services.sqs.AmazonSQS;
+import com.amazonaws.services.sqs.AmazonSQSAsync;
+import com.amazonaws.services.sqs.AmazonSQSAsyncClientBuilder;
 import com.amazonaws.services.sqs.model.Message;
 import com.amazonaws.services.sqs.model.ReceiveMessageRequest;
-import com.amazonaws.services.sqs.model.ReceiveMessageResult;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+public class MessageReceiver implements Runnable {
 
-@Component
-public class MessageReceiver {
-    @Autowired
-    private AmazonSQS amazonSQSClient;
+    private static final String QUEUE_URL = "https://sqs.ap-northeast-1.amazonaws.com/626394096352/MA-fujishiroms-sqs-standard";
+    private static final int MAX_NUMBER_OF_MESSAGES = 10; // 一度に受信する最大メッセージ数
+    private static final int WAIT_TIME_SECONDS = 20; // メッセージがない場合のロングポーリング待機時間
+    private final AmazonSQSAsync sqsAsyncClient;
 
-    // check processing or waiting
-    private boolean processing = false;
-
-    @Scheduled(fixedDelay = 10)
-    public void receiveMessage() {
-        if (processing) {
-            return;
-        }
-
-        String url = "https://sqs.ap-northeast-1.amazonaws.com/626394096352/MA-fujishiroms-sqs-standard";
-
-        ReceiveMessageRequest request = new ReceiveMessageRequest()
-                .withQueueUrl(url)
-                .withWaitTimeSeconds(10)// ロングポーリングの設定
-                .withMaxNumberOfMessages(1);  // 受信するメッセージの最大数を増やす
-
-        ReceiveMessageResult result = amazonSQSClient.receiveMessage(request);
-
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-
-        processing = true;
-
-        List<Message> messages = result.getMessages();  // 受信したメッセージをリストとして取得
-        for (Message msg : messages) {
-            // 処理開始時間
-            LocalDateTime now_bf = LocalDateTime.now();
-            System.out.println("======================================================= start =======================================================" );
-            System.out.println("Received Time: " + formatter.format(now_bf));
-
-            // 受信したメッセージの情報を表示
-            System.out.println("[" + msg.getMessageId() + "]");
-            System.out.println("  Message ID     : " + msg.getMessageId());
-            System.out.println("  Receipt Handle : " + msg.getReceiptHandle());
-            System.out.println("  Message Body   : " + msg.getBody());
-
-            // 受け取った数字分だけ待機をする
-            int waitTime = Integer.parseInt(msg.getBody()) * 1000;
-            System.out.println("wait time: " + waitTime);
-            waitInMilliseconds(waitTime);
-
-            // 処理終了時間
-            LocalDateTime now_af = LocalDateTime.now();
-            System.out.println("Processed Time: " + formatter.format(now_af));
-            System.out.println("======================================================= end =======================================================" );
-
-            // 受信したメッセージを削除
-            amazonSQSClient.deleteMessage(url, msg.getReceiptHandle());
-        }
-
-        processing = false;
+    public MessageReceiver() {
+        this.sqsAsyncClient = AmazonSQSAsyncClientBuilder.defaultClient();
     }
 
+    @Override
+    public void run() {
+        while (true) {
+            final ReceiveMessageRequest receiveMessageRequest = new ReceiveMessageRequest(QUEUE_URL)
+                    .withMaxNumberOfMessages(MAX_NUMBER_OF_MESSAGES)
+                    .withWaitTimeSeconds(WAIT_TIME_SECONDS);
+
+            final List<Message> messages = sqsAsyncClient.receiveMessage(receiveMessageRequest).getMessages();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+
+            for (final Message message : messages) {
+                System.out.println("======================================================= start =======================================================" );
+                LocalDateTime now_bf = LocalDateTime.now();
+                System.out.println("Received Time: " + formatter.format(now_bf));
+
+                System.out.println("Message");
+                System.out.println("Body:          " + message.getBody());
+
+
+                int waitTime = Integer.parseInt(message.getBody()) * 1000;
+                System.out.println("wait time: " + waitTime);
+                waitInMilliseconds(waitTime);
+                LocalDateTime now_af = LocalDateTime.now();
+                System.out.println("Processed Time: " + formatter.format(now_af));
+
+
+
+                sqsAsyncClient.deleteMessage(QUEUE_URL, message.getReceiptHandle());
+                System.out.println("======================================================= end =======================================================" );
+
+            }
+        }
+    }
     private void waitInMilliseconds(int milliseconds) {
         try {
             Thread.sleep(milliseconds);
         } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
             e.printStackTrace();
         }
     }

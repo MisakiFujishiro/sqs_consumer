@@ -1,16 +1,19 @@
 package com.msa.aws.sqs.sqs_consumer;
 
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.ApplicationContext;
 
 @SpringBootApplication
-public class SqsConsumerApplication {
+public class SqsConsumerApplication implements CommandLineRunner {
 
 	public static void main(String[] args) {
-		ApplicationContext context = SpringApplication.run(SqsConsumerApplication.class, args);
-		MessageReceiver receiver = context.getBean(MessageReceiver.class);
-		receiver.receiveMessage();
+		SpringApplication.run(SqsConsumerApplication.class, args);
+	}
 
+	@Override
+	public void run(String... args) {
+		Thread messageReceiverThread = new Thread(new MessageReceiver());
+		messageReceiverThread.start();
 	}
 }
