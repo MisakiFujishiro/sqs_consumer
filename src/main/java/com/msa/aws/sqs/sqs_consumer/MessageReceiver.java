@@ -21,7 +21,7 @@ public class MessageReceiver {
     // check processing or waiting
     private boolean processing = false;
 
-    @Scheduled(fixedDelay = 1000)
+    @Scheduled(fixedDelay = 10)
     public void receiveMessage() {
         if (processing) {
             return;
@@ -31,8 +31,8 @@ public class MessageReceiver {
 
         ReceiveMessageRequest request = new ReceiveMessageRequest()
                 .withQueueUrl(url)
-                .withWaitTimeSeconds(5)
-                .withMaxNumberOfMessages(10);  // 受信するメッセージの最大数を増やす
+                .withWaitTimeSeconds(10)// ロングポーリングの設定
+                .withMaxNumberOfMessages(1);  // 受信するメッセージの最大数を増やす
 
         ReceiveMessageResult result = amazonSQSClient.receiveMessage(request);
 
@@ -44,6 +44,7 @@ public class MessageReceiver {
         for (Message msg : messages) {
             // 処理開始時間
             LocalDateTime now_bf = LocalDateTime.now();
+            System.out.println("======================================================= start =======================================================" );
             System.out.println("Received Time: " + formatter.format(now_bf));
 
             // 受信したメッセージの情報を表示
@@ -53,13 +54,14 @@ public class MessageReceiver {
             System.out.println("  Message Body   : " + msg.getBody());
 
             // 受け取った数字分だけ待機をする
-            int waitTime = Integer.parseInt(msg.getBody()) * 10000;
+            int waitTime = Integer.parseInt(msg.getBody()) * 1000;
             System.out.println("wait time: " + waitTime);
             waitInMilliseconds(waitTime);
 
             // 処理終了時間
             LocalDateTime now_af = LocalDateTime.now();
             System.out.println("Processed Time: " + formatter.format(now_af));
+            System.out.println("======================================================= end =======================================================" );
 
             // 受信したメッセージを削除
             amazonSQSClient.deleteMessage(url, msg.getReceiptHandle());
