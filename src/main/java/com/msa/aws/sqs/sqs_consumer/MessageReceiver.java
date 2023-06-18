@@ -37,11 +37,11 @@ public class MessageReceiver implements Runnable {
 
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
             for (final Message message : messages) {
-                System.out.println("======================================================= PROCESSING START =======================================================" );
+                System.out.println("PROCESSING START =======================================================" );
 
                 //処理開始時間の表示
                 LocalDateTime now_bf = LocalDateTime.now();
-                System.out.println("Received Time: " + formatter.format(now_bf));
+                System.out.println("START TIME：" + formatter.format(now_bf)+" & MESSAGE ID： "+message.getMessageId());
 
                 //メッセージ内容の表示
                 System.out.println("Message");
@@ -56,8 +56,8 @@ public class MessageReceiver implements Runnable {
 
                 //処理完了時間の表示
                 LocalDateTime now_af = LocalDateTime.now();
-                System.out.println("Processed Time: " + formatter.format(now_af));
-                System.out.println("======================================================= PROCESSING END =======================================================" );
+                System.out.println("END TIME： " + formatter.format(now_af) +" & MESSAGE ID： "+message.getMessageId());
+                System.out.println("PROCESSING END =======================================================" );
 
             }
         }
