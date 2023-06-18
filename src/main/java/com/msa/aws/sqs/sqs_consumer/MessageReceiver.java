@@ -46,6 +46,7 @@ public class MessageReceiver implements Runnable {
                 //メッセージ内容の表示
                 System.out.println("Message");
                 System.out.println("Body:          " + message.getBody());
+                System.out.println("ID:            " + message.getMessageId());
                 //メッセージの処理（今回は待機するだけ）
                 int waitTime = Integer.parseInt(message.getBody()) * 1000;
                 System.out.println("wait time: " + waitTime);
