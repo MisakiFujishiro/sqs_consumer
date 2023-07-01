@@ -4,6 +4,7 @@ import com.amazonaws.services.sqs.AmazonSQSAsync;
 import com.amazonaws.services.sqs.model.Message;
 import com.amazonaws.services.sqs.model.ReceiveMessageRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -12,7 +13,8 @@ import java.util.List;
 @Component
 public class MessageReceiver implements Runnable {
 
-    private static final String QUEUE_URL = "https://sqs.ap-northeast-1.amazonaws.com/626394096352/MA-fujishiroms-sqs-standard";
+    @Value("${aws.sqs.url}")
+    private String QUEUE_URL;
     private static final int MAX_NUMBER_OF_MESSAGES = 10; // 一度に受信する最大メッセージ数
     private static final int WAIT_TIME_SECONDS = 20; // メッセージがない場合のロングポーリング待機時間
     private final AmazonSQSAsync sqsAsyncClient;
