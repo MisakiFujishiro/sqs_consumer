@@ -1,4 +1,0 @@
-com/msa/aws/sqs/sqs_consumer/frontendController.class
-com/msa/aws/sqs/sqs_consumer/MessageReceiver.class
-com/msa/aws/sqs/sqs_consumer/SqsConsumerApplication.class
-com/msa/aws/sqs/sqs_consumer/config/sqsConfig.class
