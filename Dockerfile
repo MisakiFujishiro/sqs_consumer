@@ -21,4 +21,4 @@ RUN ln -sf  /usr/share/zoneinfo/Asia/Tokyo /etc/localtime
 EXPOSE 8080
 
 # Javaの実行
-CMD java -jar sqs_consumer/target/sqs_consumer-0.0.1-SNAPSHOT.jar --spring.profiles.active=standard
+CMD java -jar sqs_consumer/target/sqs_consumer-0.0.1-SNAPSHOT.jar --spring.profiles.active=fifo
